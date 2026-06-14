@@ -1,10 +1,5 @@
 import './App.css'
 
-import Home from './Pages/Home.jsx'
-import Products from './Components/Products.jsx'
-import AddProduct from './Components/AddProduct.jsx'
-
-
 
 import { BrowserRouter,Routes,Route,NavLink} from 'react-router-dom'
 
