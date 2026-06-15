@@ -17,7 +17,7 @@ function App(){
       <main>
         
           <BrowserRouter>
-            <nav className='bg-yellow-900 shadow-lg text-white' >
+            <nav className='bg-lime-900 shadow-lg text-white' >
             <div className='max-w-7x1 mx-auto px-4 sm:px-6 lg:px-8 max=wl=7' >
               <ul className='flex justify-around gap-3 py-4'>
                 <li>
