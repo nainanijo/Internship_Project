@@ -2,8 +2,8 @@ import './App.css'
 import Home from './Pages/Home'
 import PO from './Pages/PO'
 import SO from './Pages/SO'
-import admin from './Pages/Admin'
-
+import Admin from './Pages/Admin'
+import Login from './Components/Login'
 
 import { BrowserRouter,Routes,Route,NavLink} from 'react-router-dom'
 
@@ -13,11 +13,11 @@ function App(){
 
   return(
     <div>
-      <h1> Hii there!</h1>
+      <h1></h1>
       <main>
         
           <BrowserRouter>
-            <nav className='bg-yellow-800 shadow-lg text-white' >
+            <nav className='bg-yellow-900 shadow-lg text-white' >
             <div className='max-w-7x1 mx-auto px-4 sm:px-6 lg:px-8 max=wl=7' >
               <ul className='flex justify-around gap-3 py-4'>
                 <li>
@@ -44,7 +44,7 @@ function App(){
               <Route path= '/' element={<Home/>}  />
               <Route path= '/PO' element={<PO/>}  />
               <Route path= '/SO' element={<SO/>}  />;
-              <Route path= '/admin' element={<admin/>}  />;
+              <Route path= '/Admin' element={<Admin/>}  />;
             </Routes>
               
         

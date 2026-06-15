@@ -1,9 +1,14 @@
 import React from 'react'
+import Login from '../Components/Login'
 
-const admin = () => {
+const Admin = () => {
   return (
-    <div>admin</div>
+    <> <div></div> 
+        <Login /> 
+        
+    </>
+    
   )
 }
 
-export default admin
+export default Admin
