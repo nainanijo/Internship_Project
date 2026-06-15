@@ -1,0 +1,10 @@
+/*to remove the bullet points*/
+nav div ul li {
+    list-style: none;
+}
+
+/* to align the header to center */
+header{
+    text-align:center;
+
+}
