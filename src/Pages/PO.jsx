@@ -2,7 +2,7 @@ import React from 'react'
 
 const PO = () => {
   return (
-    <div>PO</div>
+    <div>Place an Order!</div>
   )
 }
 

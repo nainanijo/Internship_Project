@@ -2,7 +2,7 @@ import React from 'react'
 
 const SO = () => {
   return (
-    <div>SO</div>
+    <div>Order Status</div>
   )
 }
 
