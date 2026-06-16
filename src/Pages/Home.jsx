@@ -3,6 +3,7 @@ import PO from './PO'
 import {Routes,Route,NavLink,useNavigate} from 'react-router-dom'
 import '../App.css'
 
+
 const Home = () => {
   
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ const Home = () => {
   return (
   /* 1. Main page container: Centered and using a solid, soft background color */
   <div className="flex flex-col items-center justify-center min-h-[80vh] w-full text-center px-4 bg-lime-900">
+    
     <div className="flex flex-col items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
     
     
@@ -57,7 +59,21 @@ const Home = () => {
 
     </div>
   </div>
+  <div>
+
   </div>
+
+
+
+
+
+
+
+
+
+  </div>
+
+
 );
 }
 

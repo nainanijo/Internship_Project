@@ -1,9 +1,9 @@
 import React from 'react'
-import Home from './Home'
-import PO from './PO'
-import SO from './SO'
-import Admin from './Admin'
-import Login from '../Components/Login'
+import Home from '../Pages/Home'
+import PO from '../Pages/PO'
+import SO from '../Pages/SO'
+import Admin from '../Pages/Admin'
+import Login from './Login'
 import {Routes,Route,NavLink} from 'react-router-dom'
 
 const Nav = () => {
