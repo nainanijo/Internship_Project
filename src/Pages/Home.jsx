@@ -12,7 +12,9 @@ const Home = () => {
   
   return (
   /* 1. Main page container: Centered and using a solid, soft background color */
-  <div className="flex flex-col items-center justify-center min-h-[80vh] w-full text-center px-4 bg-gray-50">
+  <div className="flex flex-col items-center justify-center min-h-[80vh] w-full text-center px-4 bg-lime-900">
+    <div className="flex flex-col items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    
     
     {/* Welcome Heading */}
     <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-10">
@@ -54,6 +56,7 @@ const Home = () => {
       </button>
 
     </div>
+  </div>
   </div>
 );
 }
