@@ -1,0 +1,61 @@
+.po-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding: 40px;
+}
+
+.po-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #0b1b3a;
+}
+
+.order-form {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.section label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.section input,
+.section select,
+.section textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.file-list {
+  margin-top: 10px;
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: #0b1b3a;
+  color: white;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #142c5c;
+}
