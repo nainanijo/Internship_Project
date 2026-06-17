@@ -19,7 +19,7 @@ const Home = () => {
     
     
     {/* Welcome Heading */}
-    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-10">
+    <h1 className= "heading text-4xl font-extrabold font- text-amber-900 tracking-tight mb-10">
       Welcome to the e-Print Shop
     </h1>
     
