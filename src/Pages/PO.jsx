@@ -5,6 +5,7 @@ function PO() {
   const [files, setFiles] = useState([]);
 
   const [formData, setFormData] = useState({
+    phone: "",
     copies: 1,
     color: "Black & White",
     paperSize: "A4",
@@ -28,7 +29,7 @@ function PO() {
     setFiles(files.filter((_, index) => index !== indexToRemove));
   };
 
-  // FORM CHANGE
+  // HANDLE INPUT CHANGE
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -36,9 +37,15 @@ function PO() {
     });
   };
 
-  // SUBMIT
+  // SUBMIT ORDER
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // simple validation
+    if (!formData.phone || formData.phone.length !== 10) {
+      alert("Please enter a valid 10-digit phone number");
+      return;
+    }
 
     console.log("Files:", files);
     console.log("Form Data:", formData);
@@ -55,6 +62,20 @@ function PO() {
         <h1>Place Print Order</h1>
 
         <form className="order-form" onSubmit={handleSubmit}>
+
+          {/* PHONE NUMBER */}
+          <div className="section">
+            <label>Phone Number</label>
+
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Enter 10-digit phone number"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
           {/* FILE UPLOAD */}
           <div className="section">
@@ -77,7 +98,7 @@ function PO() {
                   return (
                     <div key={index} className="preview-card">
 
-                      {/* DELETE BUTTON */}
+                      {/* DELETE */}
                       <button
                         type="button"
                         className="delete-btn"
@@ -88,7 +109,7 @@ function PO() {
 
                       <p>{file.name}</p>
 
-                      {/* IMAGE PREVIEW */}
+                      {/* IMAGE */}
                       {file.type.startsWith("image/") && (
                         <img
                           src={fileURL}
@@ -97,7 +118,7 @@ function PO() {
                         />
                       )}
 
-                      {/* PDF PREVIEW */}
+                      {/* PDF */}
                       {file.type === "application/pdf" && (
                         <iframe
                           src={fileURL}
@@ -200,11 +221,12 @@ function PO() {
         </form>
       </div>
 
-      {/* RIGHT SIDE - SUMMARY */}
+      {/* RIGHT SIDE SUMMARY */}
       <div className="po-right">
 
         <h2>Order Summary</h2>
 
+        <p><b>Phone:</b> {formData.phone}</p>
         <p><b>Copies:</b> {formData.copies}</p>
         <p><b>Print Type:</b> {formData.color}</p>
         <p><b>Paper Size:</b> {formData.paperSize}</p>
