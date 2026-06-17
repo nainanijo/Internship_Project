@@ -3,6 +3,7 @@ import "./PO.css";
 
 function PO() {
   const [files, setFiles] = useState([]);
+
   const [formData, setFormData] = useState({
     copies: 1,
     color: "Black & White",
@@ -11,10 +12,23 @@ function PO() {
     notes: "",
   });
 
-  const handleFileUpload = (e) => {
-    setFiles([...e.target.files]);
+  // PRICE CALCULATION
+  const calculatePrice = () => {
+    let basePrice = formData.color === "Color" ? 5 : 2;
+    return basePrice * formData.copies * files.length;
   };
 
+  // UPLOAD FILES
+  const handleFileUpload = (e) => {
+    setFiles((prev) => [...prev, ...e.target.files]);
+  };
+
+  // DELETE FILE
+  const removeFile = (indexToRemove) => {
+    setFiles(files.filter((_, index) => index !== indexToRemove));
+  };
+
+  // FORM CHANGE
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -22,115 +36,187 @@ function PO() {
     });
   };
 
+  // SUBMIT
   const handleSubmit = (e) => {
     e.preventDefault();
 
     console.log("Files:", files);
-    console.log("Print Details:", formData);
+    console.log("Form Data:", formData);
 
     alert("Order Submitted Successfully!");
   };
 
   return (
-    <div className="po-container">
-      <h1>Place Print Order</h1>
+    <div className="po-container po-layout">
 
-      <form className="order-form" onSubmit={handleSubmit}>
-        {/* File Upload */}
-        <div className="section">
-          <label>Upload Files</label>
+      {/* LEFT SIDE */}
+      <div className="po-left">
 
-          <input
-            type="file"
-            multiple
-            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-            onChange={handleFileUpload}
-          />
+        <h1>Place Print Order</h1>
 
-          {files.length > 0 && (
-            <div className="file-list">
-              <h4>Uploaded Files:</h4>
+        <form className="order-form" onSubmit={handleSubmit}>
 
-              {files.map((file, index) => (
-                <p key={index}>{file.name}</p>
-              ))}
-            </div>
-          )}
-        </div>
+          {/* FILE UPLOAD */}
+          <div className="section">
+            <label>Upload Files</label>
 
-        {/* Copies */}
-        <div className="section">
-          <label>Number of Copies</label>
+            <input
+              type="file"
+              multiple
+              accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
+              onChange={handleFileUpload}
+            />
 
-          <input
-            type="number"
-            name="copies"
-            min="1"
-            value={formData.copies}
-            onChange={handleChange}
-          />
-        </div>
+            {files.length > 0 && (
+              <div className="file-list">
+                <h4>Uploaded Files</h4>
 
-        {/* Color */}
-        <div className="section">
-          <label>Print Type</label>
+                {files.map((file, index) => {
+                  const fileURL = URL.createObjectURL(file);
 
-          <select
-            name="color"
-            value={formData.color}
-            onChange={handleChange}
-          >
-            <option>Black & White</option>
-            <option>Color</option>
-          </select>
-        </div>
+                  return (
+                    <div key={index} className="preview-card">
 
-        {/* Paper Size */}
-        <div className="section">
-          <label>Paper Size</label>
+                      {/* DELETE BUTTON */}
+                      <button
+                        type="button"
+                        className="delete-btn"
+                        onClick={() => removeFile(index)}
+                      >
+                        ✕
+                      </button>
 
-          <select
-            name="paperSize"
-            value={formData.paperSize}
-            onChange={handleChange}
-          >
-            <option>A4</option>
-            <option>A3</option>
-            <option>Letter</option>
-          </select>
-        </div>
+                      <p>{file.name}</p>
 
-        {/* Single / Double */}
-        <div className="section">
-          <label>Printing Side</label>
+                      {/* IMAGE PREVIEW */}
+                      {file.type.startsWith("image/") && (
+                        <img
+                          src={fileURL}
+                          alt={file.name}
+                          className="preview-image"
+                        />
+                      )}
 
-          <select
-            name="side"
-            value={formData.side}
-            onChange={handleChange}
-          >
-            <option>Single Side</option>
-            <option>Double Side</option>
-          </select>
-        </div>
+                      {/* PDF PREVIEW */}
+                      {file.type === "application/pdf" && (
+                        <iframe
+                          src={fileURL}
+                          title={file.name}
+                          className="pdf-preview"
+                        />
+                      )}
 
-        {/* Notes */}
-        <div className="section">
-          <label>Special Instructions</label>
+                      {/* OTHER FILES */}
+                      {!file.type.startsWith("image/") &&
+                        file.type !== "application/pdf" && (
+                          <p>📄 File uploaded (preview not supported)</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
 
-          <textarea
-            name="notes"
-            rows="4"
-            value={formData.notes}
-            onChange={handleChange}
-            placeholder="Enter any special instructions..."
-          />
-        </div>
+          {/* COPIES */}
+          <div className="section">
+            <label>Number of Copies</label>
 
-        <button type="submit" className="submit-btn">
-          Submit Order
-        </button>
-      </form>
+            <input
+              type="number"
+              name="copies"
+              min="1"
+              value={formData.copies}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* PRINT TYPE */}
+          <div className="section">
+            <label>Print Type</label>
+
+            <select
+              name="color"
+              value={formData.color}
+              onChange={handleChange}
+            >
+              <option>Black & White</option>
+              <option>Color</option>
+            </select>
+          </div>
+
+          {/* PAPER SIZE */}
+          <div className="section">
+            <label>Paper Size</label>
+
+            <select
+              name="paperSize"
+              value={formData.paperSize}
+              onChange={handleChange}
+            >
+              <option>A4</option>
+              <option>A3</option>
+              <option>Letter</option>
+            </select>
+          </div>
+
+          {/* SIDE */}
+          <div className="section">
+            <label>Printing Side</label>
+
+            <select
+              name="side"
+              value={formData.side}
+              onChange={handleChange}
+            >
+              <option>Single Side</option>
+              <option>Double Side</option>
+            </select>
+          </div>
+
+          {/* NOTES */}
+          <div className="section">
+            <label>Special Instructions</label>
+
+            <textarea
+              name="notes"
+              rows="4"
+              value={formData.notes}
+              onChange={handleChange}
+              placeholder="Enter any special instructions..."
+            />
+          </div>
+
+          {/* PRICE */}
+          <h2 style={{ marginTop: "20px", color: "#442d1c" }}>
+            Total Price: ₹{calculatePrice()}
+          </h2>
+
+          {/* SUBMIT */}
+          <button type="submit" className="submit-btn">
+            Submit Order
+          </button>
+
+        </form>
+      </div>
+
+      {/* RIGHT SIDE - SUMMARY */}
+      <div className="po-right">
+
+        <h2>Order Summary</h2>
+
+        <p><b>Copies:</b> {formData.copies}</p>
+        <p><b>Print Type:</b> {formData.color}</p>
+        <p><b>Paper Size:</b> {formData.paperSize}</p>
+        <p><b>Side:</b> {formData.side}</p>
+        <p><b>Files:</b> {files.length}</p>
+
+        <h3 style={{ marginTop: "20px", color: "#442d1c" }}>
+          Total: ₹{calculatePrice()}
+        </h3>
+
+      </div>
+
     </div>
   );
 }
