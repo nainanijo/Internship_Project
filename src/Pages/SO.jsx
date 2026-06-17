@@ -2,6 +2,33 @@ import React, { useState } from "react";
 
 const SO = () => {
   const [token, setToken] = useState("");
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+
+    setToken(value);
+
+    if (value < 0) {
+      setError("❌ Token number cannot be negative.");
+    } else {
+      setError("");
+    }
+  };
+
+  const handleSubmit = () => {
+    if (token === "") {
+      setError("❌ Please enter a token number.");
+      return;
+    }
+
+    if (token < 0) {
+      setError("❌ Token number cannot be negative.");
+      return;
+    }
+
+    alert(`Token ${token} submitted`);
+  };
 
   return (
     <div
@@ -38,9 +65,10 @@ const SO = () => {
 
         <input
           type="number"
+          min="0"
           placeholder="Enter Token Number"
           value={token}
-          onChange={(e) => setToken(e.target.value)}
+          onChange={handleChange}
           style={{
             width: "100%",
             padding: "14px",
@@ -49,12 +77,26 @@ const SO = () => {
             outline: "none",
             fontSize: "18px",
             textAlign: "center",
-            marginBottom: "28px",
+            marginBottom: "15px",
             color: "#6b4a42",
           }}
         />
 
+        {error && (
+          <p
+            style={{
+              color: "#b23a48",
+              fontSize: "14px",
+              fontWeight: "500",
+              marginBottom: "20px",
+            }}
+          >
+            {error}
+          </p>
+        )}
+
         <button
+          onClick={handleSubmit}
           style={{
             padding: "14px 42px",
             border: "none",
@@ -94,7 +136,6 @@ const SO = () => {
             }
           `}
         </style>
-
       </div>
     </div>
   );
