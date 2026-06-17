@@ -2,9 +2,8 @@ import './App.css'
 import Nav from './Components/Nav'
 import {BrowserRouter,Routes,Route,NavLink,useNavigate} from 'react-router-dom'
 import Footer from './Components/Footer'
-import Login from './Components/Login'
-import Dashboard from './Components/Dashboard'
-import Admin from './Pages/Admin'
+import PO from "./Pages/PO";
+
 
 function App() {
   return (
