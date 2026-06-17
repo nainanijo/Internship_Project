@@ -1,11 +1,13 @@
 import React from 'react'
 import {useState} from 'react'
+import { useNavigate } from "react-router-dom";
 
 const Login=() =>{
     const[isLoggedIn,setIsLoggedIn]= useState(true)
     //State hooks to capture form inputs
     const[email,setEmail] = useState("")
     const[password,setPassword]=useState('')
+    const navigate = useNavigate();
 
     //handling form submission
     const handleSubmit = (e) =>{
@@ -13,6 +15,7 @@ const Login=() =>{
     
         //API to be used here
     console.log("Logging in with",{email,passwird});
+    navigate("/Dashboard");
 
     //alert
     };
@@ -65,7 +68,7 @@ return (
           </div>
           <div>
             <button
-              type="submit"
+              type="submit" onClick={() => navigate("/Dashboard")}
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-amber-900 py-2 px-4 text-sm font-medium text-white hover:bg-amber-800 "
             >
               Sign In
