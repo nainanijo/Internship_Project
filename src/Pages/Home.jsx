@@ -13,7 +13,7 @@ const Home = () => {
   
   return (
   /* 1. Main page container: Centered and using a solid, soft background color */
-  <div className="flex flex-col items-center justify-center min-h-[80vh] w-full text-center px-4 bg-lime-900">
+  <div className="flex flex-col items-center justify-center min-h-[80vh] w-full text-center px-4 bg-amber-900">
     
     <div className="flex flex-col items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
     
@@ -28,7 +28,7 @@ const Home = () => {
       
       {/* The Glow Effect Background (Scoped to button size) */}
       <div
-        className="absolute inset-0 duration-1000 opacity-60 transition-all bg-linear-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200"
+        className="absolute inset-0 duration-1000 opacity-60 transition-all bg-linear-to-r from-amber-800 via-red-700 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200"
       ></div>
       
       {/* The Main Dark Button */}
