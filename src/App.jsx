@@ -10,10 +10,6 @@ function App() {
     <div className="flex flex-col min-h-screen justify-between">
       <div>
         <Nav />
-        <Routes>
-          <Route path='/admin' element={<Admin />} />
-           <Route path='/Dashboard' element={<Dashboard />} />
-        </Routes>
       </div>
       <Footer />
     </div>
