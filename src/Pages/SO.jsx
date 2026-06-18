@@ -1,15 +1,23 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SO = () => {
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const value = e.target.value;
 
+    // Allow only digits
+    if (!/^\d*$/.test(value)) {
+      return;
+    }
+
     setToken(value);
 
-    if (value < 0) {
+    if (value !== "" && Number(value) < 0) {
       setError("❌ Token number cannot be negative.");
     } else {
       setError("");
@@ -22,12 +30,14 @@ const SO = () => {
       return;
     }
 
-    if (token < 0) {
+    if (Number(token) < 0) {
       setError("❌ Token number cannot be negative.");
       return;
     }
 
-    alert(`Token ${token} submitted`);
+    navigate("/status", {
+      state: { token },
+    });
   };
 
   return (
@@ -52,20 +62,17 @@ const SO = () => {
       >
         <h1
           style={{
-            fontFamily: "'Poppins', sans-serif",
             color: "#9c4f3d",
-            fontWeight: "700",
             fontSize: "32px",
             marginBottom: "35px",
-            letterSpacing: "1px",
           }}
         >
           Order Status
         </h1>
 
         <input
-          type="number"
-          min="0"
+          type="text"
+          inputMode="numeric"
           placeholder="Enter Token Number"
           value={token}
           onChange={handleChange}
@@ -78,7 +85,6 @@ const SO = () => {
             fontSize: "18px",
             textAlign: "center",
             marginBottom: "15px",
-            color: "#6b4a42",
           }}
         />
 
@@ -86,8 +92,6 @@ const SO = () => {
           <p
             style={{
               color: "#b23a48",
-              fontSize: "14px",
-              fontWeight: "500",
               marginBottom: "20px",
             }}
           >
@@ -104,38 +108,16 @@ const SO = () => {
             cursor: "pointer",
             fontSize: "17px",
             fontWeight: "600",
-            backgroundColor: "#c96b57",
+
+            backgroundColor: "#7B3306",
+
             color: "white",
-            boxShadow: "0 6px 16px rgba(201,107,87,0.35)",
-            transition: "all 0.2s ease",
-          }}
-          onMouseDown={(e) => {
-            e.target.style.transform = "translateY(2px)";
-            e.target.style.boxShadow =
-              "0 3px 8px rgba(201,107,87,0.45)";
-          }}
-          onMouseUp={(e) => {
-            e.target.style.transform = "translateY(0)";
-            e.target.style.boxShadow =
-              "0 6px 16px rgba(201,107,87,0.35)";
+
+            boxShadow: "0 6px 16px rgba(139,74,59,0.4)",
           }}
         >
           Submit
         </button>
-
-        <style>
-          {`
-            input::-webkit-outer-spin-button,
-            input::-webkit-inner-spin-button {
-              -webkit-appearance: none;
-              margin: 0;
-            }
-
-            input[type=number] {
-              -moz-appearance: textfield;
-            }
-          `}
-        </style>
       </div>
     </div>
   );

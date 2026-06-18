@@ -1,6 +1,7 @@
 import './App.css';
 import Nav from './Components/Nav';
 import Footer from './Components/Footer';
+import TokenStatus from './Components/TokenStatus';
 
 import { Routes, Route } from 'react-router-dom';
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/Admin" element={<Admin />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/confirmation" element={<Confirmation />} />
+          <Route path="/status" element={<TokenStatus />} />
         </Routes>
       </div>
 
