@@ -2,6 +2,7 @@ import React from 'react'
 import {useState} from 'react'
 import { useNavigate } from "react-router-dom";
 
+
 const Login=() =>{
     const[isLoggedIn,setIsLoggedIn]= useState(true)
     //State hooks to capture form inputs
@@ -11,11 +12,13 @@ const Login=() =>{
 
     //handling form submission
     const handleSubmit = (e) =>{
+      const secureKey = import.meta.env.ADMIN_EMAIL;
+      const secureKey = import.meta.env.ADMIN_PASSWORD;
         e.preventDefault();
         if (
-          email==="admin@gmail.com" &&
-          password==="Admin@123"
-        ){
+          email===ADMIN_EMAIL &&
+          password===ADMIN_PASSWORD
+                ){
           navigate("/Dashboard");
         }
         else{
