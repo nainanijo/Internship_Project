@@ -23,7 +23,7 @@ const Login=() =>{
         }
     
         //API to be used here
-    console.log("Logging in with",{email,password});
+    // console.log("Logging in with",{email,password});
 
     //alert
     };
