@@ -59,7 +59,7 @@ function PO() {
       {/* LEFT SIDE */}
       <div className="po-left">
 
-        <h1>Place Print Order</h1>
+        <u><b><h1>PLACE PRINT ORDER</h1></b></u>
 
         <form className="order-form" onSubmit={handleSubmit}>
 
@@ -224,7 +224,7 @@ function PO() {
       {/* RIGHT SIDE SUMMARY */}
       <div className="po-right">
 
-        <h2>Order Summary</h2>
+       <u> <b><h2>Order Summary:</h2></b></u>
 
         <p><b>Phone:</b> {formData.phone}</p>
         <p><b>Copies:</b> {formData.copies}</p>
