@@ -10,16 +10,16 @@ const Token_Generator = () => {
     }
     
   return (
-    <div id='generator'>
+    <div className='p-6 text-center'>
         <button
-        onClick={handleCreateOrder}>
+        onClick={handleCreateOrder} className="bg-amber-800 text-white px-4 py-2 rounded-md hover:bg-amber-700">
         Press here for token!
         </button>
 
-        // to ensure only positive token numbers get generated
+        //to ensure only positive token numbers get generated
 
         {tokenNumber > 0 && (
-            <p id= 'generator_m'>
+            <p className= 'className="mt-4 text-lg font-bold text-gray-800">'>
                 Your token number is : {tokenNumber}
                 Please await your Order Completion!
                 </p>
