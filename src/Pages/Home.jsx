@@ -15,7 +15,7 @@ const Home = () => {
   /* 1. Main page container: Centered and using a solid, soft background color */
   <div className="flex flex-col items-center justify-center min-h-[80vh] w-full text-center px-4 bg-amber-900">
     
-    <div className="flex flex-col items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex flex-col items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8 rounded-xl">
     
     
     {/* Welcome Heading */}
@@ -36,7 +36,7 @@ const Home = () => {
         type="button"
         onClick={handleNavigate}
         className="group relative inline-flex items-center justify-center text-base rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30 cursor-pointer"
-        title="payment"
+        title="place order"
       >
         PLACE ORDER
         
