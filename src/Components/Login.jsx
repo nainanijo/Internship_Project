@@ -12,10 +12,18 @@ const Login=() =>{
     //handling form submission
     const handleSubmit = (e) =>{
         e.preventDefault();
+        if (
+          email==="admin@gmail.com" &&
+          password==="Admin@123"
+        ){
+          navigate("/Dashboard");
+        }
+        else{
+          alert("Invalid Email or Password");
+        }
     
         //API to be used here
-    console.log("Logging in with",{email,passwird});
-    navigate("/Dashboard");
+    console.log("Logging in with",{email,password});
 
     //alert
     };
@@ -68,7 +76,7 @@ return (
           </div>
           <div>
             <button
-              type="submit" onClick={() => navigate("/Dashboard")}
+              type="submit"
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-amber-900 py-2 px-4 text-sm font-medium text-white hover:bg-amber-800 "
             >
               Sign In
