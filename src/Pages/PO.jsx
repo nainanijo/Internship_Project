@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./PO.css";
-
+import { useNavigate } from "react-router-dom";
 function PO() {
+  const navigate = useNavigate();
   const [files, setFiles] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -50,7 +51,13 @@ function PO() {
     console.log("Files:", files);
     console.log("Form Data:", formData);
 
-    alert("Order Submitted Successfully!");
+    navigate("/payment", {
+    state: {
+      files,
+      formData,
+      totalPrice: calculatePrice(),
+    },
+  });
   };
 
   return (
@@ -209,9 +216,9 @@ function PO() {
           </div>
 
           {/* PRICE */}
-          <h2 style={{ marginTop: "20px", color: "#442d1c" }}>
+          <b><h2 style={{ marginTop: "20px", color: "#442d1c" }}>
             Total Price: ₹{calculatePrice()}
-          </h2>
+          </h2></b>
 
           {/* SUBMIT */}
           <button type="submit" className="submit-btn">
