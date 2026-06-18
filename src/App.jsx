@@ -11,6 +11,7 @@ import SO from './Pages/SO';
 import Admin from './Pages/Admin';
 import Payment from './Pages/payment';
 import Confirmation from './Pages/confirmation';
+import Dashboard from './Components/dashboard';
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/status" element={<TokenStatus />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
+
         </Routes>
       </div>
 
