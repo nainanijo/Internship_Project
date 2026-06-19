@@ -5,13 +5,9 @@ import TokenStatus from './Components/TokenStatus';
 
 import { Routes, Route } from 'react-router-dom';
 
-import Home from './Pages/Home';
-import PO from './Pages/PO';
-import SO from './Pages/SO';
-import Admin from './Pages/Admin';
-import Payment from './Pages/payment';
-import Confirmation from './Pages/confirmation';
-import Dashboard from './Components/dashboard';
+import PO from './pages/PO';
+import Payment from './pages/payment';
+import Confirmation from './pages/confirmation';
 
 function App() {
   return (
@@ -27,9 +23,6 @@ function App() {
           <Route path="/Admin" element={<Admin />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/confirmation" element={<Confirmation />} />
-          <Route path="/status" element={<TokenStatus />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-
         </Routes>
       </div>
 
