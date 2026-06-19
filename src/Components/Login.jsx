@@ -13,7 +13,7 @@ const Login=() =>{
     //handling form submission
     const handleSubmit = (e) =>{
       const secureKey = import.meta.env.ADMIN_EMAIL;
-      const secureKey = import.meta.env.ADMIN_PASSWORD;
+      const SecureKey = import.meta.env.ADMIN_PASSWORD;
         e.preventDefault();
         if (
           email===ADMIN_EMAIL &&
