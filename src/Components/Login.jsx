@@ -12,13 +12,14 @@ const Login=() =>{
 
     //handling form submission
     const handleSubmit = (e) =>{
-      const secureKey = import.meta.env.ADMIN_EMAIL;
-      const SecureKey = import.meta.env.ADMIN_PASSWORD;
-        e.preventDefault();
+      e.preventDefault();
+      const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+      const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+    
         if (
-          email===ADMIN_EMAIL &&
-          password===ADMIN_PASSWORD
-                ){
+          email===adminEmail &&
+          password===adminPassword
+        ){
           navigate("/Dashboard");
         }
         else{
