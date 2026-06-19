@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import "./payment.css";
 
 function Payment() {
@@ -7,13 +8,11 @@ function Payment() {
 
   const { totalPrice } = location.state || {};
 
+  const [paymentStarted, setPaymentStarted] = useState(false);
+
   const handlePayment = () => {
-    const upiId = "yourupi@oksbi"; // Replace with actual UPI ID
-
-    const upiLink =
-      `upi://pay?pa=${upiId}&pn=CollegePrintShop&am=${totalPrice}&cu=INR`;
-
-    window.location.href = upiLink;
+    // Demo payment simulation
+    setPaymentStarted(true);
   };
 
   const handlePaymentCompleted = () => {
@@ -28,27 +27,35 @@ function Payment() {
   };
 
   return (
-  <div className="payment-container">
-    <h1>Payment Page</h1>
+    <div className="payment-container">
+      <h1>Payment Page</h1>
 
-    <div className="amount-box">
-      Total Amount: ₹{totalPrice}
+      <div className="amount-box">
+        Total Amount: ₹{totalPrice}
+      </div>
+
+      <p>Please complete your payment.</p>
+
+      {!paymentStarted ? (
+        <button className="pay-btn" onClick={handlePayment}>
+          Pay via UPI
+        </button>
+      ) : (
+        <>
+          <p style={{ color: "green", fontWeight: "bold" }}>
+            Payment initiated successfully!
+          </p>
+
+          <button
+            className="complete-btn"
+            onClick={handlePaymentCompleted}
+          >
+            Payment Completed
+          </button>
+        </>
+      )}
     </div>
-
-    <p>Please complete your payment.</p>
-
-    <button className="pay-btn" onClick={handlePayment}>
-      Pay via UPI
-    </button>
-
-    <button
-      className="complete-btn"
-      onClick={handlePaymentCompleted}
-    >
-      Payment Completed
-    </button>
-  </div>
-);
+  );
 }
 
 export default Payment;
