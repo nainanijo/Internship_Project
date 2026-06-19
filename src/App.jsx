@@ -4,6 +4,10 @@ import Footer from './Components/Footer';
 import TokenStatus from './Components/TokenStatus';
 
 import { Routes, Route } from 'react-router-dom';
+import Home from './Pages/Home';
+import SO from './Pages/SO';
+import Admin from './Pages/Admin';
+import Dashboard from './Components/Dashboard'
 
 import PO from './pages/PO';
 import Payment from './pages/payment';
@@ -23,6 +27,8 @@ function App() {
           <Route path="/Admin" element={<Admin />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/confirmation" element={<Confirmation />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/status" element={<TokenStatus />} />
         </Routes>
       </div>
 
