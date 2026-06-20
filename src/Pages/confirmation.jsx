@@ -9,7 +9,9 @@ function Confirmation() {
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h1>🎉 Payment Successful</h1>
 
-      <b><h2>Token Number: {token}</h2></b>
+      <h2 style={{ fontWeight: "bold" }}>
+        Token Number: {token}
+      </h2>
 
       <h3>Amount Paid: ₹{totalPrice}</h3>
 

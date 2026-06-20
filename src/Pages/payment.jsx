@@ -11,12 +11,22 @@ function Payment() {
   const [paymentStarted, setPaymentStarted] = useState(false);
 
   const handlePayment = () => {
-    // Demo payment simulation
     setPaymentStarted(true);
   };
 
   const handlePaymentCompleted = () => {
-    const token = Math.floor(1000 + Math.random() * 9000);
+    // Get current token count
+    let count = parseInt(localStorage.getItem("tokenCount")) || 1;
+
+    // Generate token
+    const letterIndex = Math.floor((count - 1) / 999);
+    const number = ((count - 1) % 999) + 1;
+
+    const letter = String.fromCharCode(65 + letterIndex); // A, B, C...
+    const token = `${letter}${String(number).padStart(3, "0")}`;
+
+    // Save next token count
+    localStorage.setItem("tokenCount", count + 1);
 
     navigate("/confirmation", {
       state: {
