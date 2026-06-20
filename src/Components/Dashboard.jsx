@@ -19,7 +19,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5F0E6] to-[#E8D8C4] p-6">
+    <div className="min-h-screen bg-linear-to-br from-[#F5F0E6] to-[#E8D8C4] p-6">
       
       <div className="bg-amber-900 text-white p-6 rounded-2xl shadow-lg mb-6">
         <h1 className="text-3xl font-bold">🖨️ Admin Dashboard</h1>

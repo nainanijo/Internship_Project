@@ -31,6 +31,7 @@ const Nav = () => {
               to="/" 
               className={({ isActive }) => 
                 `transition-colors duration-200 ${isActive ? 'text-amber-800 font-bold' : 'text-gray-600 hover:text-amber-800'}`
+                
               }
             >
               Home
