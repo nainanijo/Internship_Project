@@ -20,6 +20,7 @@ const Login=() =>{
           email===adminEmail &&
           password===adminPassword
         ){
+          localStorage.setItem("isAdminLoggedIn","true");
           navigate("/Dashboard");
         }
         else{

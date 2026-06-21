@@ -1,6 +1,20 @@
 import React from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
+
+  if (!isLoggedIn) {
+    return <Navigate to="/admin" replace />;
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAdminLoggedIn");
+    navigate("/admin", { replace: true });
+  };
+
   const orders = [
     {
       token: 101,
@@ -19,13 +33,22 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#F5F0E6] to-[#E8D8C4] p-6">
-      
-      <div className="bg-amber-900 text-white p-6 rounded-2xl shadow-lg mb-6">
-        <h1 className="text-3xl font-bold">🖨️ Admin Dashboard</h1>
-        <p className="mt-2 text-[#F5F0E6]">
-          Manage print orders and track status
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-[#F5F0E6] to-[#E8D8C4] p-6">
+
+      <div className="flex justify-between items-center bg-amber-900 text-white p-6 rounded-2xl shadow-lg mb-6">
+        <div>
+          <h1 className="text-3xl font-bold">🖨️ Admin Dashboard</h1>
+          <p className="mt-2 text-[#F5F0E6]">
+            Manage print orders and track status
+          </p>
+        </div>
+
+        <button
+          onClick={handleLogout}
+          className="bg-[#F5F0E6] text-amber-900 px-5 py-2 rounded-lg font-bold shadow-md hover:bg-[#E8D8C4]"
+        >
+          Logout
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -39,20 +62,14 @@ const Dashboard = () => {
         <div className="bg-white p-5 rounded-xl shadow-md">
           <h3 className="text-gray-500">Pending</h3>
           <p className="text-3xl font-bold text-orange-500">
-            {
-              orders.filter((order) => order.status === "Pending")
-                .length
-            }
+            {orders.filter((order) => order.status === "Pending").length}
           </p>
         </div>
 
         <div className="bg-white p-5 rounded-xl shadow-md">
           <h3 className="text-gray-500">Completed</h3>
           <p className="text-3xl font-bold text-green-600">
-            {
-              orders.filter((order) => order.status === "Completed")
-                .length
-            }
+            {orders.filter((order) => order.status === "Completed").length}
           </p>
         </div>
       </div>
@@ -80,7 +97,6 @@ const Dashboard = () => {
 
           <p className="mb-4">
             💳 <strong>Payment Status:</strong>
-
             <span
               className={`ml-2 px-3 py-1 rounded-full text-white text-xs font-bold ${
                 order.payment === "Paid"
