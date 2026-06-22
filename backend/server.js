@@ -6,7 +6,9 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
 const app = express();
 
 // Middleware rules setup
-app.use(cors());
+app.use(cors({
+  origin: '*',
+}));
 app.use(express.json());
 
 // CONNECT TO THE DATABASE
