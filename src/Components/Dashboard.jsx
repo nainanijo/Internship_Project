@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem("isAdminLoggedIn");
+    };
+  }, []);
 
   const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
 
@@ -97,6 +103,7 @@ const Dashboard = () => {
 
           <p className="mb-4">
             💳 <strong>Payment Status:</strong>
+
             <span
               className={`ml-2 px-3 py-1 rounded-full text-white text-xs font-bold ${
                 order.payment === "Paid"
