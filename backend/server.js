@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // CONNECT TO THE DATABASE
-mongoose.connect("mongodb+srv://campus_admin:PrintShop2026@cluster0.2tmb8xg.mongodb.net/?appName=Cluster0")
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB Database connection established successfully!'))
   .catch((error) => console.error('❌ MongoDB connection error failed:', error));
 
