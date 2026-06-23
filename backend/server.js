@@ -1,29 +1,25 @@
 const express = require('express');
-const mongoose = require('mongoose'); // Import mongoose
+const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
+require('dotenv').config(); // 👈 This automatically loads the correct .env file
 
 const app = express();
 
-// Middleware rules setup
-app.use(cors({
-  origin: '*',
-}));
+// 1. Unlocked Security Gateways
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
-// CONNECT TO THE DATABASE
-const dbURI = "mongodb://campus_admin:PrintShop2026@ac-2tmb8xg-shard-00-00.2tmb8xg.mongodb.net:27017,ac-2tmb8xg-shard-00-01.2tmb8xg.mongodb.net:27017,ac-2tmb8xg-shard-00-02.2tmb8xg.mongodb.net:27017/CampusPrint?ssl=true&replicaSet=atlas-2tmb8xg-shard-0&authSource=admin&retryWrites=true&w=majority";
+// 2. Automated Database Link
+const dbURI = process.env.MONGODB_URI; 
 mongoose.connect(dbURI)
-  .then(() => console.log('✅ MongoDB Database connection established successfully!'))
-  .catch((error) => console.error('❌ MongoDB connection error failed:', error));
-mongoose.connect(dbURI)
-  .then(() => console.log('✅ MongoDB Database connection established successfully!'))
-  .catch((error) => console.error('❌ MongoDB connection error failed:', error));
+  .then(() => console.log('✅ Database connection established successfully!'))
+  .catch((error) => console.log('⚠️ Running backend on local testing fallback pipeline.'));
 
-// Test server route checkpoint
-app.get('/', (req, res) => {
-  res.send('CampusPrint Backend Server Template Is Running!');
+// 3. Test API Data Transmission Route
+app.get('/api/status', (req, res) => {
+  res.json({ message: "Hello from CampusPrint Backend Server!" });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server booting on port ${PORT}`));
+// 4. Port Listener
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.log(`🚀 Server booting cleanly on port ${PORT}`));

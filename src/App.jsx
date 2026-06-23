@@ -17,14 +17,14 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 function App() {
-  const [backendMessage, setBackendMessage] = useState("Connecting to backend...");
   useEffect(() => {
-    axios.get('http://localhost:5000/')
+    
+    axios.get('http://localhost:8080/api/status')
       .then((response) => {
-        console.log("🚀 BACKEND LINK WORKING:", response.data);
+        console.log("🚀 DATA TRANSMITTED SUCCESSFULLY:", response.data.message);
       })
       .catch((error) => {
-        console.log("❌ Frontend can't find backend at port 5000 yet.");
+        console.error("❌ Data transmission failed:", error.message);
       });
   }, []);
   return (
