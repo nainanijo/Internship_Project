@@ -39,26 +39,42 @@ function PO() {
     });
   };
 
+  // HANDLE PHONE INPUT (ONLY 10 DIGITS)
+  const handlePhoneChange = (e) => {
+    const onlyNumbers = e.target.value.replace(/\D/g, "");
+    if (onlyNumbers.length <= 10) {
+      setFormData({
+        ...formData,
+        phone: onlyNumbers,
+      });
+    }
+  };
+
   // SUBMIT ORDER
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // simple validation
+    // validation
     if (!formData.phone || formData.phone.length !== 10) {
       alert("Please enter a valid 10-digit phone number");
       return;
     }
 
+    const fullPhone = `+91${formData.phone}`;
+
     console.log("Files:", files);
-    console.log("Form Data:", formData);
+    console.log("Form Data:", { ...formData, phone: fullPhone });
 
     navigate("/payment", {
-    state: {
-      files,
-      formData,
-      totalPrice: calculatePrice(),
-    },
-  });
+      state: {
+        files,
+        formData: {
+          ...formData,
+          phone: fullPhone,
+        },
+        totalPrice: calculatePrice(),
+      },
+    });
   };
 
   return (
@@ -75,14 +91,17 @@ function PO() {
           <div className="section">
             <label>Phone Number</label>
 
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Enter 10-digit phone number"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
+            <div className="phone-input-box">
+              <span className="country-code">+91</span>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Enter 10-digit phone number"
+                value={formData.phone}
+                onChange={handlePhoneChange}
+                required
+              />
+            </div>
           </div>
 
           {/* FILE UPLOAD */}
@@ -217,9 +236,11 @@ function PO() {
           </div>
 
           {/* PRICE */}
-          <b><h2 style={{ marginTop: "20px", color: "#442d1c" }}>
-            Total Price: ₹{calculatePrice()}
-          </h2></b>
+          <b>
+            <h2 style={{ marginTop: "20px", color: "#442d1c" }}>
+              Total Price: ₹{calculatePrice()}
+            </h2>
+          </b>
 
           {/* SUBMIT */}
           <button type="submit" className="submit-btn">
@@ -232,9 +253,9 @@ function PO() {
       {/* RIGHT SIDE SUMMARY */}
       <div className="po-right">
 
-       <u> <b><h2>Order Summary:</h2></b></u>
+        <u><b><h2>Order Summary:</h2></b></u>
 
-        <p><b>Phone:</b> {formData.phone}</p>
+        <p><b>Phone:</b> {formData.phone ? `+91 ${formData.phone}` : ""}</p>
         <p><b>Copies:</b> {formData.copies}</p>
         <p><b>Print Type:</b> {formData.color}</p>
         <p><b>Paper Size:</b> {formData.paperSize}</p>
@@ -247,7 +268,6 @@ function PO() {
 
       </div>
 
-           
     </div>
   );
 }

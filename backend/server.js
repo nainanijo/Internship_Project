@@ -6,15 +6,13 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
 const app = express();
 
 // Middleware rules setup
-app.use(cors());
+app.use(cors({
+  origin: '*',
+}));
 app.use(express.json());
 
 // CONNECT TO THE DATABASE
-const dbURI = "mongodb://campus_admin:PrintShop2026@ac-2tmb8xg-shard-00-00.2tmb8xg.mongodb.net:27017/CampusPrint?ssl=true&authSource=admin&retryWrites=true&w=majority";
-
-mongoose.connect(dbURI, {
-  directConnection: true
-})
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB Database connection established successfully!'))
   .catch((error) => console.error('❌ MongoDB connection error failed:', error));
   
