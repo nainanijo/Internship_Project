@@ -12,9 +12,14 @@ app.use(cors({
 app.use(express.json());
 
 // CONNECT TO THE DATABASE
-mongoose.connect(process.env.MONGODB_URI)
+const dbURI = "mongodb://campus_admin:PrintShop2026@ac-2tmb8xg-shard-00-00.2tmb8xg.mongodb.net:27017/CampusPrint?ssl=true&authSource=admin&retryWrites=true&w=majority";
+
+mongoose.connect(dbURI, {
+  directConnection: true
+})
   .then(() => console.log('✅ MongoDB Database connection established successfully!'))
   .catch((error) => console.error('❌ MongoDB connection error failed:', error));
+
   
 // Test server route checkpoint
 app.get('/', (req, res) => {
