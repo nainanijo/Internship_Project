@@ -10,12 +10,13 @@ const SO = () => {
   const handleChange = (e) => {
     const value = e.target.value;
 
-    // Allow only digits
-    if (!/^\d*$/.test(value)) {
+    if (value !== "" && !/^[A-Z0-9-]*$/.test(value)) {
       return;
     }
 
     setToken(value);
+    setError(""); // Clear previous structural message states instantly
+  
 
     if (value !== "" && Number(value) < 0) {
       setError("❌ Token number cannot be negative.");

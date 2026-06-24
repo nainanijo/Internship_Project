@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./payment.css";
+import axios from 'axios'
 
 function Payment() {
   const location = useLocation();
@@ -14,27 +15,26 @@ function Payment() {
     setPaymentStarted(true);
   };
 
-  const handlePaymentCompleted = () => {
-    // Get current token count
-    let count = parseInt(localStorage.getItem("tokenCount")) || 1;
+ const handlePaymentCompleted = () => {
+  //  Send the checkout price data package directly to the backend API route
+  axios.post('http://localhost:8080/api/tokens/generate', { totalPrice })
+    .then((response) => {
+      // Pull down the verified generated sequential token from the database response
+      const serverToken = response.data.tokenNumber;
 
-    // Generate token
-    const letterIndex = Math.floor((count - 1) / 999);
-    const number = ((count - 1) % 999) + 1;
-
-    const letter = String.fromCharCode(65 + letterIndex); // A, B, C...
-    const token = `${letter}${String(number).padStart(3, "0")}`;
-
-    // Save next token count
-    localStorage.setItem("tokenCount", count + 1);
-
-    navigate("/confirmation", {
-      state: {
-        token,
-        totalPrice,
-      },
+      // Navigate safely to your confirmation screen using your existing state structure
+      navigate("/confirmation", {
+        state: {
+          token: serverToken,
+          totalPrice: totalPrice,
+        },
+      });
+    })
+    .catch((error) => {
+      console.error("❌ Failed to secure database token tracking entry:", error);
+      alert("Database error while securing token routing. Check terminal console.");
     });
-  };
+};
 
   return (
     <div className="payment-container">

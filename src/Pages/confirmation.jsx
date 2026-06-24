@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 function Confirmation() {
   const location = useLocation();
 
-  const { token, totalPrice } = location.state || {};
+  const token = location.state?.token || "No Active Token";
+  const totalPrice = location.state?.totalPrice || 0;
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
