@@ -8,6 +8,7 @@ const Dashboard = () => {
   // 🔑 State memory arrays to keep track of dynamic entries coming from MongoDB
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("All");
 
   // 1. Fetch live queue records directly from your cluster on page mount
   useEffect(() => {
@@ -43,6 +44,10 @@ const Dashboard = () => {
       })
       .catch((err) => console.error("Database status injection patch failed:", err));
   };
+   const filteredOrders =
+   filter === "All"
+    ? orders
+    : orders.filter((order) => order.status === filter);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#F5F0E6] to-[#E8D8C4] p-6">
@@ -62,28 +67,51 @@ const Dashboard = () => {
       </div>
 
       {/* Dynamic Statistics Block Matrix */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-5 rounded-xl shadow-md">
-          <h3 className="text-gray-500">Total Orders</h3>
-          <p className="text-3xl font-bold text-amber-900">{orders.length}</p>
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+  <button
+    onClick={() => setFilter("All")}
+    className="bg-white p-5 rounded-xl shadow-md text-left"
+  >
+    <h3 className="text-gray-500">Total Orders</h3>
+    <p className="text-3xl font-bold text-amber-900">
+      {orders.length}
+    </p>
+  </button>
 
-        <div className="bg-white p-5 rounded-xl shadow-md">
-          <h3 className="text-gray-500">Pending</h3>
-          <p className="text-3xl font-bold text-orange-500">
-            {orders.filter((order) => order.status === "Pending").length}
-          </p>
-        </div>
+  <button
+    onClick={() => setFilter("Pending")}
+    className="bg-white p-5 rounded-xl shadow-md text-left"
+  >
+    <h3 className="text-gray-500">Pending</h3>
+    <p className="text-3xl font-bold text-orange-500">
+      {orders.filter((order) => order.status === "Pending").length}
+    </p>
+  </button>
 
-        <div className="bg-white p-5 rounded-xl shadow-md">
-          <h3 className="text-gray-500">Completed</h3>
-          <p className="text-3xl font-bold text-green-600">
-            {orders.filter((order) => order.status === "Completed").length}
-          </p>
-        </div>
-      </div>
+  <button
+    onClick={() => setFilter("Completed")}
+    className="bg-white p-5 rounded-xl shadow-md text-left"
+  >
+    <h3 className="text-gray-500">Completed</h3>
+    <p className="text-3xl font-bold text-green-600">
+      {orders.filter((order) => order.status === "Completed").length}
+    </p>
+  </button>
 
-      <h2 className="text-2xl font-bold text-amber-900 mb-4">Recent Orders</h2>
+  <button
+    onClick={() => setFilter("Collected")}
+    className="bg-white p-5 rounded-xl shadow-md text-left"
+  >
+    <h3 className="text-gray-500">Collected</h3>
+    <p className="text-3xl font-bold text-blue-600">
+      {orders.filter((order) => order.status === "Collected").length}
+    </p>
+  </button>
+</div>
+
+      <h2 className="text-2xl font-bold text-amber-900 mb-4">
+  {filter === "All" ? "All Orders" : `${filter} Orders`}
+</h2>
 
       {/* Loading States Fallback */}
       {loading ? (
@@ -91,7 +119,7 @@ const Dashboard = () => {
       ) : orders.length === 0 ? (
         <p className="text-center text-gray-500">No print queue instances exist inside active memory slots.</p>
       ) : (
-        orders.map((order) => (
+        filteredOrders.map((order) => (
           <div
             key={order._id} // Using secure MongoDB ObjectID strings as structural identity elements
             className="bg-white border-l-8 border-amber-900 rounded-2xl shadow-md p-6 mb-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
