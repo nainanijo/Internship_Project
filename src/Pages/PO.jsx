@@ -104,67 +104,76 @@ function PO() {
             </div>
           </div>
 
-          {/* FILE UPLOAD */}
-          <div className="section">
-            <label>Upload Files</label>
+         {/* FILE UPLOAD */}
+<div className="section">
+  <label>Upload Files</label>
 
-            <input
-              type="file"
-              multiple
-              accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
-              onChange={handleFileUpload}
-            />
+  {/* Hidden file input */}
+  <input
+    id="file-upload"
+    className="hidden-file-input"
+    type="file"
+    multiple
+    accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
+    onChange={handleFileUpload}
+  />
 
-            {files.length > 0 && (
-              <div className="file-list">
-                <h4>Uploaded Files</h4>
+  {/* Custom button */}
+  <label htmlFor="file-upload" className="choose-file-btn">
+    📁 Choose Files
+  </label>
 
-                {files.map((file, index) => {
-                  const fileURL = URL.createObjectURL(file);
+  {files.length > 0 && (
+    <p className="selected-files">
+      ✅ {files.length} file{files.length > 1 ? "s" : ""} selected
+    </p>
+  )}
 
-                  return (
-                    <div key={index} className="preview-card">
+  {files.length > 0 && (
+    <div className="file-list">
+      <h4>Uploaded Files</h4>
 
-                      {/* DELETE */}
-                      <button
-                        type="button"
-                        className="delete-btn"
-                        onClick={() => removeFile(index)}
-                      >
-                        ✕
-                      </button>
+      {files.map((file, index) => {
+        const fileURL = URL.createObjectURL(file);
 
-                      <p>{file.name}</p>
+        return (
+          <div key={index} className="preview-card">
+            <button
+              type="button"
+              className="delete-btn"
+              onClick={() => removeFile(index)}
+            >
+              ✕
+            </button>
 
-                      {/* IMAGE */}
-                      {file.type.startsWith("image/") && (
-                        <img
-                          src={fileURL}
-                          alt={file.name}
-                          className="preview-image"
-                        />
-                      )}
+            <p>{file.name}</p>
 
-                      {/* PDF */}
-                      {file.type === "application/pdf" && (
-                        <iframe
-                          src={fileURL}
-                          title={file.name}
-                          className="pdf-preview"
-                        />
-                      )}
-
-                      {/* OTHER FILES */}
-                      {!file.type.startsWith("image/") &&
-                        file.type !== "application/pdf" && (
-                          <p>📄 File uploaded (preview not supported)</p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+            {file.type.startsWith("image/") && (
+              <img
+                src={fileURL}
+                alt={file.name}
+                className="preview-image"
+              />
             )}
+
+            {file.type === "application/pdf" && (
+              <iframe
+                src={fileURL}
+                title={file.name}
+                className="pdf-preview"
+              />
+            )}
+
+            {!file.type.startsWith("image/") &&
+              file.type !== "application/pdf" && (
+                <p>📄 File uploaded (preview not supported)</p>
+              )}
           </div>
+        );
+      })}
+    </div>
+  )}
+</div>
 
           {/* COPIES */}
           <div className="section">
