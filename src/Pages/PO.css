@@ -49,7 +49,7 @@
   box-shadow: 0 0 5px rgba(68, 45, 28, 0.3);
 }
 
-/* PHONE INPUT WITH +91 */
+/* PHONE INPUT */
 .phone-input-box {
   display: flex;
   align-items: center;
@@ -66,7 +66,6 @@
   border-right: 1px solid #ccc;
   font-weight: bold;
   color: #333;
-  white-space: nowrap;
 }
 
 .phone-input-box input {
@@ -74,27 +73,53 @@
   outline: none;
   padding: 12px;
   flex: 1;
-  font-size: 14px;
-  width: 100%;
   background: transparent;
-  box-shadow: none !important;
-  border-radius: 0;
 }
 
 .phone-input-box input:focus {
-  border: none !important;
   box-shadow: none !important;
 }
 
-/* FILE LIST CONTAINER */
-.file-list {
+/* ===========================
+   FILE UPLOAD BUTTON
+=========================== */
+
+.choose-file-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #442d1c, #6b4b36);
+  color: white;
+  padding: 15px 35px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 5px 15px rgba(68, 45, 28, 0.3);
+}
+
+.choose-file-btn:hover {
+  background: linear-gradient(135deg, #5d3e28, #8b5e3c);
+  transform: translateY(-2px);
+}
+
+.choose-file-btn:active {
+  transform: scale(0.98);
+}
+
+.selected-files {
   margin-top: 10px;
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+/* FILE LIST */
+.file-list {
+  margin-top: 15px;
   background: #f4f4f4;
   padding: 15px;
   border-radius: 10px;
 }
 
-/* PREVIEW CARD */
 .preview-card {
   margin-top: 15px;
   padding: 15px;
@@ -107,38 +132,34 @@
 
 .preview-card:hover {
   transform: scale(1.01);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* IMAGE PREVIEW */
 .preview-image {
   width: 200px;
   margin-top: 10px;
   border-radius: 10px;
 }
 
-/* PDF PREVIEW */
 .pdf-preview {
   width: 100%;
   height: 400px;
-  margin-top: 10px;
   border: none;
+  margin-top: 10px;
   border-radius: 10px;
 }
 
-/* DELETE BUTTON */
 .delete-btn {
   position: absolute;
   top: 10px;
   right: 10px;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
   border: none;
+  border-radius: 50%;
   background: #e11d48;
   color: white;
   cursor: pointer;
-  font-weight: bold;
 }
 
 .delete-btn:hover {
@@ -155,36 +176,34 @@
   font-size: 18px;
   border-radius: 10px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.3s;
 }
 
 .submit-btn:hover {
   background: #3b1506;
 }
 
+/* LAYOUT */
 .po-layout {
   display: flex;
   gap: 20px;
 }
 
-/* LEFT SIDE (FORM) */
 .po-left {
   flex: 2;
 }
 
-/* RIGHT SIDE (SUMMARY PANEL) */
 .po-right {
   flex: 1;
   background: white;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(124, 31, 31, 0.1);
+  box-shadow: 0 0 10px rgba(124,31,31,0.1);
   height: fit-content;
   position: sticky;
   top: 20px;
 }
 
-/* RESPONSIVE */
 @media (max-width: 900px) {
   .po-layout {
     flex-direction: column;
@@ -193,4 +212,58 @@
   .po-right {
     position: static;
   }
+}
+/* =====================================
+   CUSTOM FILE UPLOAD BUTTON
+===================================== */
+
+/* Hide the default file input */
+.hidden-file-input {
+  display: none;
+}
+
+/* Custom Choose Files button */
+.choose-file-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background: linear-gradient(135deg, #442d1c, #6b4b36);
+  color: white;
+
+  padding: 14px 30px;
+  border-radius: 12px;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(68, 45, 28, 0.25);
+
+  user-select: none;
+}
+
+.choose-file-btn:hover {
+  background: linear-gradient(135deg, #5d3e28, #8a6144);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(68, 45, 28, 0.35);
+}
+
+.choose-file-btn:active {
+  transform: scale(0.98);
+}
+
+/* File count */
+.selected-files {
+  margin-top: 12px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* Optional: Upload section spacing */
+.section .choose-file-btn {
+  margin-top: 8px;
 }
