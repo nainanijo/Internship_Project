@@ -37,7 +37,10 @@ const Nav = () => {
               Home
             </NavLink>
           </li>
-
+          <a href="#about" className="text-gray-600 hover:text-gray-900 font-medium">About</a>
+          <a href="/#contact" className="font-medium text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              Contact
+          </a>
           <li>
             <NavLink 
               to="/SO" 
