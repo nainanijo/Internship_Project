@@ -65,7 +65,15 @@ app.get('/api/status', (req, res) => {
   res.json({ message: "Hello from CampusPrint Backend Server!" });
 });
 
-// 🚀 ROUTE 1: ALL MUST BE FIRST to stop it clashing with dynamic tracking codes!
+// ==========================================
+// 🎯 DATA ROUTE ENDPOINTS
+// ==========================================
+
+app.get('/api/status', (req, res) => {
+  res.json({ message: "Hello from CampusPrint Backend Server!" });
+});
+
+// 🚀 1. Fetch all tokens (Static Route)
 app.get('/api/tokens/all', async (req, res) => {
   try {
     const allTokens = await Token.find({}).sort({ createdAt: -1 });
@@ -75,7 +83,18 @@ app.get('/api/tokens/all', async (req, res) => {
   }
 });
 
-// 🚀 ROUTE 2: Dynamic lookup sits BELOW static words
+// 🚀 2. DEDICATED ROUTE FOR ADMIN DASHBOARD MESSAGE LOADS (Static Route - MOVED UP HERE)
+app.get('/api/contact/all', async (req, res) => {
+  try {
+    const messages = await Contact.find({}).sort({ createdAt: -1 });
+    res.json(messages);
+  } catch (error) {
+    console.error("Backend message retrieval error:", error);
+    res.status(500).json({ error: "Failed to retrieve contact log archives." });
+  }
+});
+
+// 🚀 3. Dynamic lookup (Sits safely below static words)
 app.get('/api/tokens/:number', async (req, res) => {
   try {
     const foundToken = await Token.findOne({ tokenNumber: req.params.number });
