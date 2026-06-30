@@ -4,6 +4,7 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const Contact = require('./models/Contact');
 require('dotenv').config(); 
 
 const Token = require('./models/Token'); 
@@ -22,7 +23,8 @@ const dbURI = process.env.MONGODB_URI ? process.env.MONGODB_URI.trim() : undefin
 mongoose.connect(dbURI)
   .then(() => console.log('✅ Database connection established successfully!'))
   .catch((error) => console.log('⚠️ Running backend on local testing fallback pipeline.', error));
-  // Configure Multer Disk Storage Engine
+
+// Configure Multer Disk Storage Engine
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/'); // Save files into /uploads folder
@@ -34,15 +36,15 @@ const storage = multer.diskStorage({
   }
 });
 
-// File Type Filter: Only allow PDF, DOC, PPT
+// File Type Filter: Allow PDF, DOC, PPT + Images for payment screenshots
 const fileFilter = (req, file, cb) => {
-  const allowedExtensions = ['.pdf', '.doc', '.docx', '.ppt', '.pptx'];
+  const allowedExtensions = ['.pdf', '.doc', '.docx', '.ppt', '.pptx', '.png', '.jpg', '.jpeg'];
   const ext = path.extname(file.originalname).toLowerCase();
   
   if (allowedExtensions.includes(ext)) {
     cb(null, true); // Accept file
   } else {
-    cb(new Error('Invalid file format. Only PDF, DOC, and PPT allowed!'), false); // Reject
+    cb(new Error('Invalid file format. Only PDF, DOC, PPT, PNG, JPG allowed!'), false); // Reject
   }
 };
 
@@ -50,14 +52,13 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ 
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 10 * 1024 } // 10MB max
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB max ← FIXED
 });
 
 app.use('/uploads', express.static('uploads'));
 
-
 // ==========================================
-// 🎯 DATA ROUTE ENDPOINTS (FIXED CONFIGURATION)
+// 🎯 DATA ROUTE ENDPOINTS
 // ==========================================
 
 app.get('/api/status', (req, res) => {
@@ -86,16 +87,25 @@ app.get('/api/tokens/:number', async (req, res) => {
     res.status(500).json({ error: "Server lookup operation failed." });
   }
 });
-app.post('/api/tokens/generate', upload.single('file'), async (req, res) => {
+
+// 🚀 ROUTE 3: Generate token with file upload + proper error handling
+app.post('/api/tokens/generate', (req, res, next) => {
+  upload.single('file')(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: `Upload error: ${err.message}` });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  });
+}, async (req, res) => {
   try {
     const { totalPrice } = req.body;
 
-    // 1. Multer puts the file info in req.file - check it exists
     if (!req.file) {
       return res.status(400).json({ error: "Please upload a document." });
     }
 
-    // 2. Your existing token logic - keep this part
     const totalRecords = await Token.countDocuments({});
     const count = totalRecords + 1;
     const letterIndex = Math.floor((count - 1) / 999);
@@ -103,12 +113,11 @@ app.post('/api/tokens/generate', upload.single('file'), async (req, res) => {
     const letter = String.fromCharCode(65 + letterIndex); 
     const tokenStr = `${letter}${String(number).padStart(3, "0")}`;
 
-    // 3. Save with file data
     const newToken = new Token({
       tokenNumber: tokenStr,
-      totalPrice: totalPrice,
-      documentPath: `/uploads/${req.file.filename}`,     // ← Saves: /uploads/1698765432-123456789.pdf
-      originalFileName: req.file.originalname           // ← Saves: resume.pdf
+      totalPrice: Number(totalPrice), // ← FIXED: Convert to Number
+      documentPath: `/uploads/${req.file.filename}`,
+      originalFileName: req.file.originalname
     });
     
     await newToken.save();
@@ -120,6 +129,18 @@ app.post('/api/tokens/generate', upload.single('file'), async (req, res) => {
   }
 });
 
+// ==========================================================
+// 📩 DEDICATED ROUTE FOR ADMIN DASHBOARD MESSAGE LOADS
+// ==========================================================
+app.get('/api/contact/all', async (req, res) => {
+  try {
+    const messages = await Contact.find({}).sort({ createdAt: -1 });
+    res.json(messages);
+  } catch (error) {
+    console.error("Backend message retrieval error:", error);
+    res.status(500).json({ error: "Failed to retrieve contact log archives." });
+  }
+});
 
 app.patch('/api/tokens/:id/status', async (req, res) => {
   try {
