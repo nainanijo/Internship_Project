@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
-import axios from "axios"; // 👈 Crucial communication tool
+import axios from "axios"; 
 
 const Dashboard = () => {
   const navigate = useNavigate();
