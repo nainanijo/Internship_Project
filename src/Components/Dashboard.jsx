@@ -57,11 +57,10 @@ const Dashboard = () => {
       .catch((err) => console.error("Database status injection patch failed:", err));
   };
 
-  const filteredOrders =
-    filter === "All"
-      ? orders
-      : orders.filter((order) => order.status === filter);
-
+const filteredOrders =
+  filter === "All"
+    ? orders.filter((order) => order.status !== "Collected") 
+    : orders.filter((order) => order.status === filter);
   return (
     <div className="min-h-screen bg-linear-to-br from-[#F5F0E6] to-[#E8D8C4] p-6">
 
