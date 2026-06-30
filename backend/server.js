@@ -8,7 +8,7 @@ const Razorpay = require('razorpay');
 require('dotenv').config();
 
 const Token = require('./models/Token');
-
+const Contact = require('./models/Contact'); 
 const app = express();
 
 app.use(cors({ origin: '*' }));
@@ -249,6 +249,36 @@ app.patch('/api/tokens/:id/status', async (req, res) => {
     res.status(500).json({
       error: "Failed to update order processing status"
     });
+  }
+});
+
+// ================================
+// CONTACT FORM
+// ================================
+//  Public endpoint for visitors to submit the contact form
+app.post('/api/contact/submit', async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: "All form fields are strictly required." });
+    }
+    
+    const newContactMessage = new Contact({ name, email, message });
+    await newContactMessage.save();
+    
+    res.status(201).json({ message: "Inquiry submitted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to save message inquiry payload to server." });
+  }
+});
+
+// Admin endpoint to fetch all messages (Put this safe from token clash routes)
+app.get('/api/contact/all', async (req, res) => {
+  try {
+    const messages = await Contact.find({}).sort({ createdAt: -1 });
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve contact log archives." });
   }
 });
 
