@@ -66,7 +66,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-linear-to-br from-[#F5F0E6] to-[#E8D8C4] p-6">
 
       {/* Header Banner Component */}
-      <div className="flex justify-between items-center bg-amber-900 text-white p-6 rounded-2xl shadow-lg mb-6">
+      <div className="flex flex-col md:flex-row justify-between items-center bg-amber-900 text-white p-6 rounded-2xl shadow-lg mb-6">
         <div>
           <h1 className="text-3xl font-bold">🖨️ Admin Dashboard</h1>
           <p className="mt-2 text-[#F5F0E6]">Manage print orders and track status</p>
@@ -143,12 +143,14 @@ const Dashboard = () => {
               📄 <strong>Settled Value:</strong> ₹{order.totalPrice}
             </p>
 
-            <p className="mb-4">
-              💳 <strong>Payment Status:</strong>
-              <span className="ml-2 px-3 py-1 rounded-full text-white text-xs font-bold bg-green-600">
-                Paid (Verified)
-              </span>
-            </p>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 mb-4">
+                <span className="text-gray-700">
+                 <strong>Payment Status:</strong>
+                </span>
+                <span className="inline-block w-max px-2.5 py-0.5 rounded-full text-white text-[11px] font-bold bg-green-600">
+                 Paid (Verified)
+                </span>
+                </div>
 
             {/* Select Status Controls Interactivity */}
             <div className="flex flex-wrap items-center gap-3">
