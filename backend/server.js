@@ -10,7 +10,7 @@ const app = express();
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
-const dbURI = process.env.MONGODB_URI; 
+const dbURI = process.env.MONGODB_URI ? process.env.MONGODB_URI.trim() : undefined;
 mongoose.connect(dbURI)
   .then(() => console.log('✅ Database connection established successfully!'))
   .catch((error) => console.log('⚠️ Running backend on local testing fallback pipeline.', error));
