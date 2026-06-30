@@ -131,53 +131,70 @@ const Dashboard = () => {
         <p className="text-center text-gray-500 py-6">No print queue instances exist inside active memory slots.</p>
       ) : (
         filteredOrders.map((order) => (
-          <div
-            key={order._id}
-            className="bg-white border-l-8 border-amber-900 rounded-2xl shadow-md p-6 mb-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-          >
-            <h3 className="text-xl font-bold text-amber-900 mb-3">
-              🎟️ Token #{order.tokenNumber}
-            </h3>
+  <div
+    key={order._id}
+    className="bg-white border-l-8 border-amber-900 rounded-2xl shadow-md p-6 mb-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+  >
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+      <h3 className="text-xl font-bold text-amber-900">
+        🎟️ Token #{order.tokenNumber}
+      </h3>
+      
+      {/* 🚀 NEW: Clickable Document Download Button */}
+      {order.documentPath ? (
+        <a 
+          href={`http://localhost:8080${order.documentPath}`} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-900/10 hover:bg-amber-900/20 text-amber-900 text-xs font-bold rounded-lg transition-colors border border-amber-900/25 max-w-max"
+        >
+          📂 View Document ({order.originalFileName || "Download"})
+        </a>
+      ) : (
+        <span className="text-xs text-red-500 font-medium">⚠️ No document attached</span>
+      )}
+    </div>
 
-            <p className="mb-2">
-              📄 <strong>Settled Value:</strong> ₹{order.totalPrice}
-            </p>
+    <p className="mb-2 text-sm text-gray-700">
+      📄 <strong>Settled Value:</strong> ₹{order.totalPrice}
+    </p>
 
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 mb-4">
-                <span className="text-gray-700">
-                 <strong>Payment Status:</strong>
-                </span>
-                <span className="inline-block w-max px-2.5 py-0.5 rounded-full text-white text-[11px] font-bold bg-green-600">
-                 Paid (Verified)
-                </span>
-                </div>
+    {/* Responsive Payment Status Row Block */}
+    <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 mb-4 text-sm">
+      <span className="text-gray-700">
+        💳 <strong>Payment Status:</strong>
+      </span>
+      <span className="inline-block w-max px-2.5 py-0.5 rounded-full text-white text-[11px] font-bold bg-green-600">
+        Paid (Verified)
+      </span>
+    </div>
 
-            {/* Select Status Controls Interactivity */}
-            <div className="flex flex-wrap items-center gap-3">
-              <label className="font-medium text-amber-900">Status:</label>
+    {/* Select Status Controls Interactivity */}
+    <div className="flex flex-wrap items-center gap-3 text-sm">
+      <label className="font-medium text-amber-900">Status:</label>
 
-              <select
-                id={`status-select-${order._id}`}
-                defaultValue={order.status}
-                className="border-2 border-amber-900 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
-              >
-                <option value="Pending">Pending</option>
-                <option value="Printing">Printing</option>
-                <option value="Completed">Completed</option>
-                <option value="Collected">Collected</option>
-              </select>
+      <select
+        id={`status-select-${order._id}`}
+        defaultValue={order.status}
+        className="border-2 border-amber-900 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
+      >
+        <option value="Pending">Pending</option>
+        <option value="Printing">Printing</option>
+        <option value="Completed">Completed</option>
+        <option value="Collected">Collected</option>
+      </select>
 
-              <button 
-                onClick={() => {
-                  const selectElement = document.getElementById(`status-select-${order._id}`);
-                  handleUpdateStatus(order._id, selectElement.value);
-                }}
-                className="bg-amber-900 text-white px-5 py-2 rounded-lg font-semibold hover:bg-[#6F4E37] hover:scale-105 transition"
-              >
-                Update Status
-              </button>
-            </div>
-          </div>
+      <button 
+        onClick={() => {
+          const selectElement = document.getElementById(`status-select-${order._id}`);
+          handleUpdateStatus(order._id, selectElement.value);
+        }}
+        className="bg-amber-900 text-white px-5 py-2 rounded-lg font-semibold hover:bg-[#6F4E37] hover:scale-105 transition active:scale-95"
+      >
+        Update Status
+      </button>
+    </div>
+  </div>
         ))
       )}
 
