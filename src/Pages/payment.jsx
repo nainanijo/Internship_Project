@@ -10,31 +10,40 @@ function Payment() {
   const { totalPrice } = location.state || {};
 
   const [paymentStarted, setPaymentStarted] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handlePayment = () => {
     setPaymentStarted(true);
   };
 
- const handlePaymentCompleted = () => {
-  //  Send the checkout price data package directly to the backend API route
-  axios.post('http://localhost:8080/api/tokens/generate', { totalPrice })
-    .then((response) => {
-      // Pull down the verified generated sequential token from the database response
-      const serverToken = response.data.tokenNumber;
+ const handlePaymentCompleted = async () => {
+  if (!selectedFile) {
+    alert('Please select a file first');
+    return;
+  }
 
-      // Navigate safely to your confirmation screen using your existing state structure
-      navigate("/confirmation", {
-        state: {
-          token: serverToken,
-          totalPrice: totalPrice,
-        },
-      });
-    })
-    .catch((error) => {
-      console.error("❌ Failed to secure database token tracking entry:", error);
-      alert("Database error while securing token routing. Check terminal console.");
+  const formData = new FormData();
+  formData.append('file', selectedFile);
+  formData.append('totalPrice', totalPrice);
+
+  try {
+    const response = await axios.post('http://localhost:8080/api/tokens/generate', formData);
+    
+    const serverToken = response.data.tokenNumber;
+    
+    navigate("/confirmation", {
+      state: {
+        token: serverToken,
+        totalPrice: totalPrice,
+        fileName: response.data.originalFileName
+      }
     });
+  } catch (error) {
+    console.error("❌ Failed to secure database token tracking entry:", error);
+    alert(error.response?.data?.error || "Database error while securing token routing.");
+  }
 };
+
 
   return (
     <div className="payment-container">
@@ -52,6 +61,14 @@ function Payment() {
         </button>
       ) : (
         <>
+        <div style={{ marginBottom: '15px' }}>
+        <input
+        type="file"
+        accept=".pdf,.doc,.docx,.ppt,.pptx"
+        onChange={(e) => setSelectedFile(e.target.files[0])}
+        />
+       {selectedFile && <p>File: {selectedFile.name}</p>}
+        </div>
           <p style={{ color: "green", fontWeight: "bold" }}>
             Payment initiated successfully!
           </p>
