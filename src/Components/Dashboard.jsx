@@ -5,22 +5,34 @@ import axios from "axios";
 const Dashboard = () => {
   const navigate = useNavigate();
   
-  // 🔑 State memory arrays to keep track of dynamic entries coming from MongoDB
+  // 🔑 State Memory Slots
   const [orders, setOrders] = useState([]);
+  const [messages, setMessages] = useState([]); // Added Contact Messages state
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
 
-  // 1. Fetch live queue records directly from your cluster on page mount
+  // 1. Fetch live queue records and contact messages from your cluster on mount
   useEffect(() => {
-    axios.get('http://localhost:8080/api/tokens/all')
-      .then((res) => {
-        setOrders(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
+    // Run both fetch sequences in parallel safely
+    const fetchDashboardData = async () => {
+      try {
+        const tokenRes = await axios.get('http://localhost:8080/api/tokens/all');
+        setOrders(tokenRes.data);
+      } catch (err) {
         console.error("Error fetching live dashboard records:", err);
-        setLoading(false);
-      });
+      }
+
+      try {
+        const messageRes = await axios.get('http://localhost:8080/api/contact/all');
+        setMessages(messageRes.data);
+      } catch (err) {
+        console.error("Error loading message streams:", err);
+      }
+
+      setLoading(false); // Disable spin loaders
+    };
+
+    fetchDashboardData();
   }, []);
 
   // 2. Authentication check gates (Kept perfectly matching your design)
@@ -44,10 +56,11 @@ const Dashboard = () => {
       })
       .catch((err) => console.error("Database status injection patch failed:", err));
   };
-   const filteredOrders =
-   filter === "All"
-    ? orders
-    : orders.filter((order) => order.status === filter);
+
+  const filteredOrders =
+    filter === "All"
+      ? orders
+      : orders.filter((order) => order.status === filter);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#F5F0E6] to-[#E8D8C4] p-6">
@@ -68,67 +81,64 @@ const Dashboard = () => {
 
       {/* Dynamic Statistics Block Matrix */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-  <button
-    onClick={() => setFilter("All")}
-    className="bg-white p-5 rounded-xl shadow-md text-left"
-  >
-    <h3 className="text-gray-500">Total Orders</h3>
-    <p className="text-3xl font-bold text-amber-900">
-      {orders.length}
-    </p>
-  </button>
+        <button
+          onClick={() => setFilter("All")}
+          className="bg-white p-5 rounded-xl shadow-md text-left"
+        >
+          <h3 className="text-gray-500">Total Orders</h3>
+          <p className="text-3xl font-bold text-amber-900">{orders.length}</p>
+        </button>
 
-  <button
-    onClick={() => setFilter("Pending")}
-    className="bg-white p-5 rounded-xl shadow-md text-left"
-  >
-    <h3 className="text-gray-500">Pending</h3>
-    <p className="text-3xl font-bold text-orange-500">
-      {orders.filter((order) => order.status === "Pending").length}
-    </p>
-  </button>
+        <button
+          onClick={() => setFilter("Pending")}
+          className="bg-white p-5 rounded-xl shadow-md text-left"
+        >
+          <h3 className="text-gray-500">Pending</h3>
+          <p className="text-3xl font-bold text-orange-500">
+            {orders.filter((order) => order.status === "Pending").length}
+          </p>
+        </button>
 
-  <button
-    onClick={() => setFilter("Completed")}
-    className="bg-white p-5 rounded-xl shadow-md text-left"
-  >
-    <h3 className="text-gray-500">Completed</h3>
-    <p className="text-3xl font-bold text-green-600">
-      {orders.filter((order) => order.status === "Completed").length}
-    </p>
-  </button>
+        <button
+          onClick={() => setFilter("Completed")}
+          className="bg-white p-5 rounded-xl shadow-md text-left"
+        >
+          <h3 className="text-gray-500">Completed</h3>
+          <p className="text-3xl font-bold text-green-600">
+            {orders.filter((order) => order.status === "Completed").length}
+          </p>
+        </button>
 
-  <button
-    onClick={() => setFilter("Collected")}
-    className="bg-white p-5 rounded-xl shadow-md text-left"
-  >
-    <h3 className="text-gray-500">Collected</h3>
-    <p className="text-3xl font-bold text-blue-600">
-      {orders.filter((order) => order.status === "Collected").length}
-    </p>
-  </button>
-</div>
+        <button
+          onClick={() => setFilter("Collected")}
+          className="bg-white p-5 rounded-xl shadow-md text-left"
+        >
+          <h3 className="text-gray-500">Collected</h3>
+          <p className="text-3xl font-bold text-blue-600">
+            {orders.filter((order) => order.status === "Collected").length}
+          </p>
+        </button>
+      </div>
 
       <h2 className="text-2xl font-bold text-amber-900 mb-4">
-  {filter === "All" ? "All Orders" : `${filter} Orders`}
-</h2>
+        {filter === "All" ? "All Orders" : `${filter} Orders`}
+      </h2>
 
       {/* Loading States Fallback */}
       {loading ? (
-        <p className="text-center text-amber-900 font-medium">Fetching real-time document queue maps...</p>
+        <p className="text-center text-amber-900 font-medium py-6">Fetching real-time document queue maps...</p>
       ) : orders.length === 0 ? (
-        <p className="text-center text-gray-500">No print queue instances exist inside active memory slots.</p>
+        <p className="text-center text-gray-500 py-6">No print queue instances exist inside active memory slots.</p>
       ) : (
         filteredOrders.map((order) => (
           <div
-            key={order._id} // Using secure MongoDB ObjectID strings as structural identity elements
+            key={order._id}
             className="bg-white border-l-8 border-amber-900 rounded-2xl shadow-md p-6 mb-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             <h3 className="text-xl font-bold text-amber-900 mb-3">
               🎟️ Token #{order.tokenNumber}
             </h3>
 
-            {/* Note: Standard fallback labels used until file collection uploads are piped */}
             <p className="mb-2">
               📄 <strong>Settled Value:</strong> ₹{order.totalPrice}
             </p>
@@ -168,8 +178,59 @@ const Dashboard = () => {
           </div>
         ))
       )}
+
+      {/* =======================================================
+          📩 NEW SECTION: USER INQUIRIES & MESSAGES HOOK
+          ======================================================= */}
+      <div className="mt-12 bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-amber-900">📩 User Inquiries & Messages</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Respond directly to student problems or campus print system feedback.
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          {loading ? (
+            <p className="text-sm text-gray-400 text-center py-4">Syncing messages...</p>
+          ) : messages.length === 0 ? (
+            <p className="text-sm text-gray-400 text-center py-6 bg-[#FAF6F0] rounded-xl border border-dashed border-gray-200">
+              No incoming inquiries found. Your inbox is completely clean!
+            </p>
+          ) : (
+            messages.map((msg) => (
+              <div 
+                key={msg._id} 
+                className="p-5 bg-[#FAF6F0] border border-[#E6DCD0] rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:border-amber-900"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center flex-wrap gap-2">
+                    <span className="text-base font-bold text-amber-900">{msg.name}</span>
+                    <span className="text-xs text-gray-500 font-medium">({msg.email})</span>
+                  </div>
+                  <p className="text-sm text-gray-700 bg-white/60 p-3 rounded-lg border border-gray-100 mt-2 italic">
+                    "{msg.message}"
+                  </p>
+                  <span className="block text-[11px] text-gray-400 pt-1">
+                    Received: {new Date(msg.createdAt).toLocaleString()}
+                  </span>
+                </div>
+                
+                {/* Dynamic Quick Mail Reply action hook */}
+                <a 
+                  href={`mailto:${msg.email}?subject=CampusPrint Support Response`}
+                  className="px-5 py-2.5 bg-amber-900 hover:bg-[#6F4E37] text-white text-xs font-bold rounded-lg shadow-md transition-all active:scale-95 whitespace-nowrap flex items-center gap-2 self-end md:self-auto"
+                >
+                  Reply via Email ✉️
+                </a>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
     </div>
   );
 };
 
-export default Dashboard;
+export default Dashboard
