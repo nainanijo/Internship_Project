@@ -18,11 +18,10 @@ const TokenSchema = new mongoose.Schema({
   },
 
   // Store multiple uploaded file paths
-  documentPath: [{
-    type: String,
-    required: true
+ documents: [{
+    documentPath: { type: String, required: true },
+    originalFileName: { type: String, required: true }
   }],
-
   // Store original file names
   originalFileName: [{
     type: String,

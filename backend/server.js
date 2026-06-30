@@ -183,53 +183,54 @@ app.post('/api/payment/create-order', async (req, res) => {
     });
   }
 });
-// ================================
-// GENERATE TOKEN + UPLOAD FILES
-// ================================
-app.post('/api/tokens/generate', upload.array('file'), async (req, res) => {
+// ==========================================
+// 🚀 GENERATE TOKEN ROUTE & multi-upload entries 
+// ==========================================
+app.post('/api/tokens/generate', (req, res, next) => {
+  upload.array('files', 10)(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: `Upload error: ${err.message}` });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  });
+}, async (req, res) => {
   try {
     const { totalPrice } = req.body;
 
+    // Verify if files array has entries processed by the Multer storage engine
     if (!req.files || req.files.length === 0) {
-      return res.status(400).json({
-        error: "Please upload at least one document."
-      });
+      return res.status(400).json({ error: "Please upload at least one print document." });
     }
 
-    // Generate Token
     const totalRecords = await Token.countDocuments({});
     const count = totalRecords + 1;
-
     const letterIndex = Math.floor((count - 1) / 999);
     const number = ((count - 1) % 999) + 1;
-
-    const letter = String.fromCharCode(65 + letterIndex);
+    const letter = String.fromCharCode(65 + letterIndex); 
     const tokenStr = `${letter}${String(number).padStart(3, "0")}`;
 
-    // Store file paths
-    const documentPaths = req.files.map(file => `/uploads/${file.filename}`);
-    const originalFileNames = req.files.map(file => file.originalname);
+    // Compile multi-upload entries array mapping through the express file list parameters
+    const mappedDocuments = req.files.map(file => ({
+      documentPath: `/uploads/${file.filename}`,
+      originalFileName: file.originalname
+    }));
 
     const newToken = new Token({
       tokenNumber: tokenStr,
-      totalPrice,
-      documentPath: documentPaths,
-      originalFileName: originalFileNames
+      totalPrice: Number(totalPrice),
+      documents: mappedDocuments
     });
-
+    
     await newToken.save();
-
     res.status(201).json(newToken);
-
+    
   } catch (error) {
-    console.error("Token generation failure:", error);
-
-    res.status(500).json({
-      error: "Failed to process upload."
-    });
+    console.error("Multi-Token generation failure details:", error);
+    res.status(500).json({ error: "Failed to process target database document upload streams." });
   }
 });
-
 // ================================
 // UPDATE ORDER STATUS
 // ================================

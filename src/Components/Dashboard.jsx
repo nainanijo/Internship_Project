@@ -135,30 +135,35 @@ const Dashboard = () => {
     key={order._id}
     className="bg-white border-l-8 border-amber-900 rounded-2xl shadow-md p-6 mb-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
   >
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-      <h3 className="text-xl font-bold text-amber-900">
-        🎟️ Token #{order.tokenNumber}
-      </h3>
-      
-      {/* 🚀 NEW: Clickable Document Download Button */}
-      {order.documentPath ? (
-        <a 
-          href={`http://localhost:8080${order.documentPath}`} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-900/10 hover:bg-amber-900/20 text-amber-900 text-xs font-bold rounded-lg transition-colors border border-amber-900/25 max-w-max"
-        >
-          📂 View Document ({order.originalFileName || "Download"})
-        </a>
-      ) : (
-        <span className="text-xs text-red-500 font-medium">⚠️ No document attached</span>
-      )}
-    </div>
-
-    <p className="mb-2 text-sm text-gray-700">
-      📄 <strong>Settled Value:</strong> ₹{order.totalPrice}
-    </p>
-
+   {/* Locating the top title area block inside your filteredOrders mapping loop */}
+<div className="flex flex-col gap-2 mb-4 pb-4 border-b border-gray-100">
+  <h3 className="text-xl font-bold text-amber-900">
+    🎟️ Token #{order.tokenNumber}
+  </h3>
+  
+  {/* 🚀 NEW: Dynamic multi-document link generator loop */}
+  <div className="flex flex-col gap-2 mt-1">
+    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Attached Print Files:</span>
+    
+    {order.documents && order.documents.length > 0 ? (
+      <div className="flex flex-wrap gap-2">
+        {order.documents.map((doc, index) => (
+          <a 
+            key={doc._id || index}
+            href={`http://localhost:8080${doc.documentPath}`} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-900/10 hover:bg-amber-900/20 text-amber-900 text-xs font-bold rounded-lg transition-colors border border-amber-900/25 truncate max-w-xs"
+          >
+            📂 File {index + 1}: {doc.originalFileName}
+          </a>
+        ))}
+      </div>
+    ) : (
+      <span className="text-xs text-red-500 font-medium italic">⚠️ No print assets tracked on this token.</span>
+    )}
+  </div>
+</div>
     {/* Responsive Payment Status Row Block */}
     <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 mb-4 text-sm">
       <span className="text-gray-700">
